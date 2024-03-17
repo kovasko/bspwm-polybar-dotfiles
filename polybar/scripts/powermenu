@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# Logout function
+logout() {
+	# For each opened window
+	bspc query --nodes | while read -r winid; do
+		# Close it
+		xdotool windowkill "$winid"
+	done
+	# Kill programs
+	killprogs
+	# Quit bspwm
+	bspc quit 1
+}
+
+# Open menu
+
+chosen=$(printf "  Power Off\n  Restart\n󰒲  Suspend\n  Logout" | rofi -dmenu )
+
+case "$chosen" in
+	"  Power Off")
+	       logout	
+		systemctl poweroff
+	       	;;
+	"  Restart")
+		logout
+		systemctl reboot
+	       ;;
+       "󰒲  Suspend")
+		systemctl suspend
+		;;
+	"  Logout")
+		logout
+	       	;;
+esac

@@ -1,0 +1,232 @@
+;==========================================================
+;
+;
+;   ██████╗  ██████╗ ██╗  ██╗   ██╗██████╗  █████╗ ██████╗
+;   ██╔══██╗██╔═══██╗██║  ╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗
+;   ██████╔╝██║   ██║██║   ╚████╔╝ ██████╔╝███████║██████╔╝
+;   ██╔═══╝ ██║   ██║██║    ╚██╔╝  ██╔══██╗██╔══██║██╔══██╗
+;   ██║     ╚██████╔╝███████╗██║   ██████╔╝██║  ██║██║  ██║
+;   ╚═╝      ╚═════╝ ╚══════╝╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+;
+;
+;   To learn more about how to configure Polybar
+;   go to https://github.com/polybar/polybar
+;
+;   The README contains a lot of information
+;
+;==========================================================
+
+[colors]
+background = #282a36
+background-alt = #2997de
+foreground = #D9E0EE
+primary = #2181c2
+secondary = #e4ee13
+altert = #89dceb
+disabled = #20212b
+
+[bar/example]
+
+width = 99%
+height = 28pt
+radius = 8
+
+; dpi = 96
+
+offset-y = 8
+offset-x = 8
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+line-size = 3pt
+
+ border-size = 0pt
+ border-color = #0000000
+ border-radius = 8
+
+padding-left = 2
+padding-right = 2
+
+module-margin = 1
+
+separator-foreground = ${colors.disabled}
+
+font-0 = "JetBrainsMono Nerd Font:style=Regular:size=10;2"
+font-1 = "JetBrainsMono Nerd Font:style=Bold:size=15;2"
+font-2 = "JetBrainsMono Nerd Font:size=29;5"
+font-3 = "Material Icons Outlined:9;4"
+font-4 = "Material Icons Round:9;4"
+font-5 = "Source Han Sans CN:size=9;2"
+#info-cava
+modules-left = menu xworkspaces xwindow info-cava
+modules-right = filesystem pulseaudio change-layout xkeyboard memory cpu network-connect wlan eth bluetooth date battery session
+
+cursor-click = pointer
+cursor-scroll = ns-resize
+
+enable-ipc = true
+
+; tray-position = right
+
+; wm-restack = generic
+wm-restack = bspwm
+; wm-restack = i3
+; override-redirect = true
+
+ [module/menu]
+ type = custom/text
+ content = 
+ content-padding = 1
+ content-background = ${colors.background}
+ content-foreground = #1793d1 
+ content-font = 1
+ click-left = ~/.config/polybar/scripts/menu
+ click-middle = ~/.config/polybar/scripts/menu_full
+
+
+
+[module/xworkspaces]
+type = internal/xworkspaces
+
+label-active = %name%
+label-active-background = ${colors.background-alt}
+label-active-underline= ${colors.primary}
+label-active-padding = 1
+
+label-occupied = %name%
+label-occupied-padding = 1
+
+label-urgent = %name%
+label-urgent-background = ${colors.alert}
+label-urgent-padding = 1
+
+label-empty = %name%
+label-empty-foreground = ${colors.disabled}
+label-empty-padding = 1
+
+[module/xwindow]
+type = internal/xwindow
+label = %title:0:60:...%
+
+[module/info-cava]
+type = custom/script
+ exec = $HOME/.config/polybar/scripts/info-cava.py -f 24 -b 12 -e d9e0ee,89dceb,f5c2e7,96cdfb -c average
+tail = true
+
+[module/filesystem]
+type = internal/fs
+interval = 25
+
+mount-0 = /
+
+label-mounted =  %{F#32a0a8} %mountpoint%%{F-} %percentage_used%%
+
+label-unmounted = %mountpoint% not mounted
+label-unmounted-foreground = ${colors.disabled}
+
+[module/pulseaudio]
+type = internal/pulseaudio
+format-volume-prefix = "%{F#e24c89} "
+format-volume-prefix-foreground = ${colors.primary}
+format-volume = <label-volume>
+click-right = pavucontrol
+label-volume = %percentage%%
+label-muted =  "%{F#e07091}󰝟 "
+
+label-muted-foreground = ${colors.disabled}
+
+[module/xkeyboard]
+type = internal/xkeyboard
+blacklist-0 = num lock
+label-layout = %layout%
+label-indicator = 󰪛
+label-layout-foreground = ${colors.foreground}
+label-indicator-padding = 2
+label-indicator-margin = 1
+label-indicator-foreground = ${colors.foreground}
+label-indicator-background = ${colors.background-alt}
+
+[module/change-layout]
+type = custom/text
+content = "%{F#2181c2} "
+click-right = exec $HOME/.config/polybar/scripts/keyboard-layout.sh
+
+[module/memory]
+type = internal/memory
+interval = 2
+format-prefix ="%{F#60c8d6}󰍛 RAM "
+format-prefix-foreground = ${colors.primary}
+label = %percentage_used:2%%
+
+[module/cpu]
+type = internal/cpu
+interval = 2
+format-prefix ="%{F#60c8d6} CPU "
+format-prefix-foreground = ${colors.primary}
+label = %percentage:2%%
+
+[network-base]
+type = internal/network
+interval = 5
+format-connected = <label-connected>
+format-disconnected = <label-disconnected>
+label-disconnected = 󰲛 %{F#26A98B}%ifname%%{F#707880}
+
+[module/network-connect]
+type = custom/text
+content = %{F#bd93f9}󰌘%{F-} 
+click-left =$HOME/.config/polybar/scripts/rofi-network-manager/rofi-network-manager.sh
+click-right = nm-connection-editor
+
+[module/wlan]
+inherit = network-base
+interface-type = wireless
+label-connected =  %{F#26A98B} %{F-} %essid%  %{F#26A98B}󰩟%{F-}  %local_ip%
+
+[module/eth]
+inherit = network-base
+interface-type = wired
+label-connected = %{F#26A98B}󰈁%{F-} %ifname% %{F#26A98B}󰩟%{F-} %local_ip%
+
+[module/battery]
+type = internal/battery
+full-at = 99
+battery = BAT0
+adapter = AC
+label-full= %{F#26A98B}%{F-}  %percentage%%
+format-full= <label-full> 
+label-charging= %{F#26A98B}%{F-}  %percentage%% 
+format-charging= <label-charging>
+label-discharging= %{F#ff9533}%{F-}  %percentage%% 
+format-discharging= <label-discharging>
+ 
+[module/date]
+type = internal/date
+interval = 30
+label =  %time%
+label-padding = 1
+label-font = 0
+label-background = #
+time = %{F#ffbd33} %%{F-} %H:%M 
+time-alt = %{F#ffbd33} %%{F-} %d-%m-%Y
+
+[module/bluetooth]
+type = custom/script
+exec = $HOME/.config/polybar/scripts/bluetooth.sh
+interval = 2
+click-left = exec blueman-manager
+click-right = exec $HOME/.config/polybar/scripts/toggle_bluetooth.sh
+format-padding = 1
+format-foreground = #ffffff
+
+[module/session]
+type = custom/text
+click-left =$HOME/.config/polybar/scripts/powermenu 
+content =%{F#8844dc} 
+content-background = ${colors.shade-2}
+content-foreground = ${colors.shade-5}
+content-padding = 1
+
+[settings]
+screenchange-reload = true

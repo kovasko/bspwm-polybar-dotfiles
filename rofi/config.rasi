@@ -1,0 +1,92 @@
+@theme "/dev/null"
+
+* {
+	bg: #282a36;
+	bg-alt: #444b6a;
+
+	fg: #FFFFFF;
+	fg-alt: #787c99;
+
+	background-color: @bg;
+	
+	border: 2;
+	margin: 0;
+	padding: 0;
+	spacing: 0;
+}
+
+
+configuration {
+	show-icons: true;
+	icon-theme: "Papirus";
+	location: 0;
+	font: "JetBrainsMono Nerd Font 12";	
+	display-drun: "Search: ";
+}
+
+window { 
+  border-radius:12px;
+	width: 50%;
+	transparency: "real";
+	orientation: vertical;
+  border-width: 10px;
+	border-color: #fff;
+}
+
+mainbox {
+	children: [inputbar, listview];
+}
+
+
+// ELEMENT
+// -----------------------------------
+
+element {
+	padding: 10 10;
+	text-color: @fg-alt;
+}
+
+element selected {
+	text-color: @fg;
+	background-color: #6d739c;
+  border-radius: 15px;
+}
+
+element-text {
+	background-color: inherit;
+	text-color: inherit;
+}
+
+element-icon {
+	size: 25 px;
+	background-color: inherit;
+	padding: 0 6 0 0;
+	alignment: vertical;
+}
+
+listview {
+	columns: 2;
+	lines: 9;
+	padding: 18 10;
+	fixed-height: false;
+	fixed-columns: true;
+	fixed-lines: true;
+	border: 0 10 6 10;
+}
+
+// INPUT BAR 
+//------------------------------------------------
+
+entry {
+	text-color: @fg ;
+	padding: 10 10 0 0;
+	margin: 0 -2 0 0;
+}
+
+
+prompt {
+  text-color: @fg ;
+  padding: 10 6 0 10;
+  margin: 0 -2 0 0;
+
+}
